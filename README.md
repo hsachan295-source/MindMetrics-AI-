@@ -1,16 +1,23 @@
 # MindMetrics AI 🧠📱
 ### Student Social Media & Mental Health Impact Prediction System
 
-[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Production_Deployed-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://mindmetrics-ai-44be.onrender.com)
+[![Render](https://img.shields.io/badge/Render-Live-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://mindmetrics-ai-44be.onrender.com)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Machine Learning](https://img.shields.io/badge/Machine_Learning-Random_Forest-FF6F00?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org)
 
 **MindMetrics AI** is a fullstack machine learning application designed to evaluate, predict, and analyze student mental health indicators based on screen time, social media consumption habits, physical exercise, sleep hygiene, and academic load.
 
-The system features a **FastAPI backend** powered by a trained Random Forest classifier/regressor and a **React + Vite frontend** with a glassmorphism theme, real-time Recharts visualizations, interactive assessment forms, and CSV/JSON log export capabilities.
+The system features a live **FastAPI backend** deployed on Render (`https://mindmetrics-ai-44be.onrender.com`) powered by a trained Random Forest classifier/regressor and a **React + Vite frontend** with a glassmorphism theme, real-time Recharts visualizations, interactive assessment forms, and CSV/JSON log export capabilities.
+
+---
+
+## 🌐 Live URLs
+
+- **Production FastAPI Backend**: [https://mindmetrics-ai-44be.onrender.com](https://mindmetrics-ai-44be.onrender.com)
+- **Interactive Swagger API Docs**: [https://mindmetrics-ai-44be.onrender.com/docs](https://mindmetrics-ai-44be.onrender.com/docs)
 
 ---
 
@@ -41,7 +48,7 @@ The system features a **FastAPI backend** powered by a trained Random Forest cla
   - Confidential 24/7 helpline directory (Tele-MANAS, 988 Lifeline, Befrienders Worldwide).
 
 - **🔄 Automatic Backend Fallback**:
-  - Real-time connection monitoring with FastAPI (`http://127.0.0.1:8000`).
+  - Real-time connection monitoring with production FastAPI (`https://mindmetrics-ai-44be.onrender.com`).
   - Graceful fallback to a local ML simulation engine if the backend is offline.
 
 ---
@@ -49,10 +56,11 @@ The system features a **FastAPI backend** powered by a trained Random Forest cla
 ## 🛠️ Tech Stack & Architecture
 
 ### Backend (`/backend`)
-- **Language**: Python 3.13
+- **Language**: Python 3.12
+- **Deployment**: Render Web Service
 - **Framework**: FastAPI with Pydantic data validation & CORSMiddleware
 - **Server**: Uvicorn
-- **ML / Data Processing**: Scikit-Learn, Pandas, Joblib
+- **ML / Data Processing**: Scikit-Learn (1.6.1), Pandas, Joblib
 
 ### Frontend (`/frontend`)
 - **Framework**: React 18 + Vite
@@ -63,75 +71,19 @@ The system features a **FastAPI backend** powered by a trained Random Forest cla
 
 ---
 
-## 📁 Repository Folder Structure
-
-```
-MindMetrics-AI/
-├── backend/
-│   ├── main.py                                           # FastAPI REST backend & model endpoints
-│   ├── Mental_Health_Model.pkl                           # Trained Random Forest model pickle
-│   ├── Student Social Media And Mental Health Impact.csv # Dataset source
-│   ├── requirements.txt                                  # Python dependencies
-│   └── README.md                                         # Backend guide
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── common/                                   # Badge, Button, Card, Input, Modal, RangeSlider, Select
-│   │   │   ├── dashboard/                                # OverviewKPI, PlatformChart, RecentActivity, RiskDistribution, UsageChart
-│   │   │   ├── form/                                     # DemographicFields, LifestyleFields, PredictionForm, QuickPresets, UsageFields
-│   │   │   ├── history/                                  # ExportActions, FilterControls, PredictionTable
-│   │   │   ├── layout/                                   # Footer, Header, Layout, Navbar, Sidebar
-│   │   │   ├── resources/                                # CrisisSupport, WellBeingTips
-│   │   │   └── results/                                  # PredictionResultCard, Recommendations, ScoreGauge, StressBreakdown
-│   │   ├── context/                                      # AppContext.jsx
-│   │   ├── hooks/                                        # useLocalStorage.js
-│   │   ├── pages/                                        # DashboardPage, HistoryPage, PredictorPage, ResourcesPage, SettingsPage
-│   │   ├── services/                                     # api.js, sampleData.js
-│   │   ├── styles/                                       # index.css
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   ├── vite.config.js
-│   └── index.html
-├── .gitignore
-├── ML_Project-mental-health.ipynb                         # Jupyter notebook model training
-├── Mental_Health_Model.pkl                               # Root trained model
-├── Student Social Media And Mental Health Impact.csv     # Root dataset
-├── main.py                                               # Root FastAPI entry script
-└── README.md                                             # Project documentation
-```
-
----
-
-## 🚀 Quick Start & Installation Guide
-
-### Prerequisites
-- Python 3.9+
-- Node.js v18+ and npm
+## 🚀 Quick Start & Local Setup Guide
 
 ### 1. Setup & Run FastAPI Backend
 ```bash
-# Navigate to backend directory
 cd backend
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Launch FastAPI server
 python -m uvicorn main:app --reload --port 8000
 ```
-- **Backend API URL**: `http://127.0.0.1:8000`
-- **Interactive Swagger Documentation**: `http://127.0.0.1:8000/docs`
 
 ### 2. Setup & Run React Frontend
 ```bash
-# Navigate to frontend directory (in a new terminal)
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start Vite dev server
 npm run dev
 ```
 - **Web UI URL**: `http://localhost:5173`
@@ -140,7 +92,7 @@ npm run dev
 
 ## 📡 API Specification
 
-### `POST /predict`
+### `POST https://mindmetrics-ai-44be.onrender.com/predict`
 Calculates predicted mental health score based on student parameters.
 
 #### Request Body Schema:
@@ -167,14 +119,6 @@ Calculates predicted mental health score based on student parameters.
   "predicted_mental_health_score": 7.85
 }
 ```
-
----
-
-## 🔬 Model & Dataset Details
-
-The Machine Learning model is trained on survey evaluations of student digital habits:
-- **Features**: Age, Gender, Academic Level, Country, Primary Social Media Platform, Purpose of Use, Daily Screen Hours, Daily Phone Unlocks, Study Hours, Exercise Hours, Sleep Hours, Self-rated Stress Level.
-- **Output Target**: Predicted Mental Health Score (1.00 to 10.00 scale).
 
 ---
 

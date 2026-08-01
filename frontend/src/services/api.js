@@ -1,6 +1,10 @@
 import { calculateLocalSimulationScore } from './sampleData';
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
+// Production FastAPI Render Backend URL from environment variable or fallback
+const RAW_API_URL = import.meta.env.VITE_API_URL || 'https://mindmetrics-ai-44be.onrender.com';
+const API_BASE_URL = RAW_API_URL.replace(/\/+$/, '');
+
+export { API_BASE_URL };
 
 /**
  * Check if FastAPI backend server is live and responsive

@@ -4,7 +4,7 @@ import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
 import { useApp } from '../context/AppContext';
-import { checkBackendHealth } from '../services/api';
+import { checkBackendHealth, API_BASE_URL } from '../services/api';
 import { Server, RefreshCw, CheckCircle2, XCircle, Code } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -18,9 +18,9 @@ export default function SettingsPage() {
     setIsTesting(false);
     setLastCheckResult(result);
     if (result.isLive) {
-      showToast('FastAPI backend connection verified successfully!', 'success');
+      showToast('Production FastAPI backend connection verified successfully!', 'success');
     } else {
-      showToast('FastAPI backend is offline. Using simulated engine.', 'warning');
+      showToast('Production FastAPI backend is offline. Using simulated engine.', 'warning');
     }
   };
 
@@ -28,14 +28,14 @@ export default function SettingsPage() {
     <div>
       <Header
         title="System & API Configuration"
-        description="Monitor FastAPI server status, test REST endpoints, and inspect machine learning model metadata."
+        description="Monitor production FastAPI server status, test REST endpoints, and inspect machine learning model metadata."
       />
 
       <div className="space-y-6">
         {/* Backend Status Card */}
         <Card
-          title="FastAPI Machine Learning Server"
-          subtitle="Endpoint: http://127.0.0.1:8000/predict"
+          title="Production FastAPI Machine Learning Server"
+          subtitle={`Endpoint: ${API_BASE_URL}/predict`}
           icon={Server}
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-slate-800/40 border border-slate-700/40">
@@ -86,7 +86,7 @@ export default function SettingsPage() {
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[10px]">
                   POST
                 </span>
-                <span className="text-slate-200">http://127.0.0.1:8000/predict</span>
+                <span className="text-slate-200">{API_BASE_URL}/predict</span>
               </div>
               <p className="text-[11px] text-slate-400 font-sans leading-relaxed mb-3">
                 Calculates predicted mental health score based on student demographics, daily usage hours, unlock frequency, sleep, study, and stress levels.
