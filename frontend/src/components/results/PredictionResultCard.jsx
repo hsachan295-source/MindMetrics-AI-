@@ -1,24 +1,29 @@
-import React from 'react';
-import Card from '../common/Card';
+import React, { useState } from 'react';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import ScoreGauge from './ScoreGauge';
 import StressBreakdown from './StressBreakdown';
 import Recommendations from './Recommendations';
-import AnimatedCounter from '../common/AnimatedCounter';
+import AIInsightSummary from './AIInsightSummary';
+import FeatureImportance from './FeatureImportance';
 import { getRiskAssessment } from '../../services/sampleData';
+import { exportAssessmentPDF } from '../../utils/exportPdf';
 import { 
   RotateCcw, 
   Share2, 
   Server, 
   Cpu, 
   Clock, 
-  Calendar 
+  Calendar,
+  Download,
+  Check
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function PredictionResultCard({ prediction, onNewAssessment }) {
   const { showToast } = useApp();
+  const [isExporting, setIsExporting] = useState(false);
+
   if (!prediction) return null;
 
   const risk = getRiskAssessment(prediction.score);
@@ -27,6 +32,19 @@ export default function PredictionResultCard({ prediction, onNewAssessment }) {
   if (prediction.score >= 8.0) glowClass = 'glow-purple';
   else if (prediction.score >= 6.5) glowClass = 'glow-red';
   else if (prediction.score >= 4.0) glowClass = 'glow-amber';
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    showToast('Generating high-resolution evaluation report PDF...', 'info');
+    try {
+      await exportAssessmentPDF('pdf-export-container', `MindMetrics_Report_${prediction.id}.pdf`);
+      showToast('PDF Evaluation Report downloaded successfully!', 'success');
+    } catch (err) {
+      showToast(`PDF Export failed: ${err.message}`, 'error');
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const handleShare = () => {
     if (navigator.clipboard) {
@@ -38,58 +56,70 @@ export default function PredictionResultCard({ prediction, onNewAssessment }) {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner Card with Risk-Level Glow */}
-      <div className={`glass-card rounded-2xl p-6 border ${glowClass} transition-all duration-300`}>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="flex items-center gap-2 mb-2">
+    <div id="pdf-export-container" className="space-y-6 p-2 rounded-2xl">
+      {/* Hero Visual Section: Dominated by Hero Score Gauge */}
+      <div className={`glass-card rounded-[12px] p-6 md:p-8 border ${glowClass} relative overflow-hidden transition-all duration-300`}>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="flex-1 text-center lg:text-left space-y-4">
+            <div className="flex items-center justify-center lg:justify-start gap-2.5 flex-wrap">
               <Badge variant={risk.badgeColor} size="md">
                 {risk.level}
               </Badge>
               {prediction.isLiveBackend ? (
-                <span className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50 font-sans">
-                  <Server className="w-3 h-3" /> FastAPI Live
+                <span className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-800/50 font-sans">
+                  <Server className="w-3.5 h-3.5" /> FastAPI Live Backend
                 </span>
               ) : (
-                <span className="flex items-center gap-1 text-[11px] text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/50 font-sans">
-                  <Cpu className="w-3 h-3" /> Simulated Engine
+                <span className="flex items-center gap-1.5 text-xs text-amber-400 bg-amber-950/60 px-3 py-1 rounded-full border border-amber-800/50 font-sans">
+                  <Cpu className="w-3.5 h-3.5" /> Simulated ML Engine
                 </span>
               )}
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-extrabold font-heading text-white tracking-tight">
-              Score: <AnimatedCounter value={prediction.score} decimals={2} duration={1.2} />{' '}
-              <span className="text-sm font-normal text-slate-400 font-sans">/ 10.0</span>
-            </h2>
-            <p className="text-xs md:text-sm text-slate-300 mt-2 max-w-xl font-sans">
-              {risk.summary}
-            </p>
+            <div>
+              <h1 className="text-3xl md:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight">
+                Mental Stress Index
+              </h1>
+              <p className="text-sm md:text-base text-slate-300 mt-2.5 max-w-2xl font-sans leading-relaxed">
+                {risk.summary}
+              </p>
+            </div>
 
-            <div className="flex items-center gap-4 text-xs text-slate-400 mt-4 font-sans">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                {new Date(prediction.date).toLocaleDateString()}
+            <div className="flex items-center justify-center lg:justify-start gap-5 text-xs text-slate-400 font-sans pt-2 border-t border-slate-800/60">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-blue-400" />
+                {new Date(prediction.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
               </span>
               <span>•</span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-blue-400" />
                 {new Date(prediction.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </span>
+              <span>•</span>
+              <span className="font-mono text-slate-300">ID: {prediction.id}</span>
             </div>
           </div>
 
-          <ScoreGauge score={prediction.score} />
+          {/* Large Hero Score Gauge */}
+          <div className="shrink-0">
+            <ScoreGauge score={prediction.score} />
+          </div>
         </div>
       </div>
 
-      {/* Grid: Radar Breakdown & Action Plan */}
+      {/* AI Plain-Language Insight Summary */}
+      <AIInsightSummary prediction={prediction} />
+
+      {/* Radar Breakdown & Model Explainability (Feature Importance) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <StressBreakdown data={prediction} />
-        <Recommendations score={prediction.score} />
+        <FeatureImportance prediction={prediction} />
       </div>
 
-      {/* Actions */}
+      {/* Recommendations Action Plan */}
+      <Recommendations score={prediction.score} />
+
+      {/* Action Buttons Toolbar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
         <Button
           variant="secondary"
@@ -99,13 +129,26 @@ export default function PredictionResultCard({ prediction, onNewAssessment }) {
           Evaluate Another Student
         </Button>
 
-        <Button
-          variant="outline"
-          onClick={handleShare}
-          icon={Share2}
-        >
-          Share Score Report
-        </Button>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={handleShare}
+            icon={Share2}
+            className="flex-1 sm:flex-initial"
+          >
+            Share Summary
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={handleExportPDF}
+            isLoading={isExporting}
+            icon={Download}
+            className="flex-1 sm:flex-initial"
+          >
+            Export PDF Report
+          </Button>
+        </div>
       </div>
     </div>
   );

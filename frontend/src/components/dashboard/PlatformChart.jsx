@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload }) => {
     const avgUsage = data.avgUsage !== undefined ? data.avgUsage : (data.usageHours || 'N/A');
 
     return (
-      <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 p-4 rounded-xl shadow-2xl text-slate-100 text-xs sm:text-sm min-w-[220px] space-y-2.5 font-sans transition-all duration-200 pointer-events-none">
+      <div className="bg-[#131826]/95 backdrop-blur-md border border-[#1F2937] p-4 rounded-xl shadow-2xl text-slate-100 text-xs sm:text-sm min-w-[220px] space-y-2.5 font-sans pointer-events-none">
         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
           <span className="font-medium text-slate-400">Platform:</span>
           <span className="font-bold text-white text-sm tracking-wide">{data.platform}</span>
@@ -80,10 +80,10 @@ const CustomTooltip = ({ active, payload }) => {
 export default function PlatformChart({ data = DASHBOARD_STATS.platformImpact }) {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const getBarColor = (score) => {
-    if (score >= 7.0) return '#EF4444'; // High Stress
-    if (score >= 4.0) return '#F59E0B'; // Moderate
-    return '#10B981'; // Low
+  const getGradientFill = (score) => {
+    if (score >= 7.0) return 'url(#highRiskBarGrad)';
+    if (score >= 4.0) return 'url(#modRiskBarGrad)';
+    return 'url(#lowRiskBarGrad)';
   };
 
   return (
@@ -117,6 +117,21 @@ export default function PlatformChart({ data = DASHBOARD_STATS.platformImpact })
             layout="vertical" 
             margin={{ top: 15, right: 50, left: 15, bottom: 15 }}
           >
+            <defs>
+              <linearGradient id="highRiskBarGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#ef4444" />
+                <stop offset="100%" stopColor="#f43f5e" />
+              </linearGradient>
+              <linearGradient id="modRiskBarGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#eab308" />
+              </linearGradient>
+              <linearGradient id="lowRiskBarGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#06b6d4" />
+              </linearGradient>
+            </defs>
+
             <CartesianGrid 
               strokeDasharray="3 3" 
               stroke="#334155" 
@@ -157,7 +172,7 @@ export default function PlatformChart({ data = DASHBOARD_STATS.platformImpact })
               {data.map((entry, index) => (
                 <Cell 
                   key={`cell-${index}`} 
-                  fill={getBarColor(entry.avgScore)}
+                  fill={getGradientFill(entry.avgScore)}
                   style={{
                     filter: activeIndex === index ? 'brightness(1.25)' : 'brightness(1)',
                     transition: 'filter 200ms ease-in-out',

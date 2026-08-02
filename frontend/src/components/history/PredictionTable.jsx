@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
+import EmptyState from '../common/EmptyState';
 import FilterControls from './FilterControls';
 import ExportActions from './ExportActions';
 import { History, Eye, Trash2 } from 'lucide-react';
@@ -35,6 +36,7 @@ export default function PredictionTable() {
       title="Historical Evaluation Records"
       subtitle="View, search, filter, and export all recorded model predictions."
       icon={History}
+      glowColor="blue"
       action={<ExportActions data={filteredItems} />}
     >
       <FilterControls
@@ -47,13 +49,20 @@ export default function PredictionTable() {
       />
 
       {filteredItems.length === 0 ? (
-        <div className="text-center py-12 text-slate-500 text-sm">
-          No matching prediction logs found.
-        </div>
+        <EmptyState
+          title="No Prediction Records Found"
+          description={
+            history.length === 0
+              ? 'Your prediction log is currently empty. Run a new assessment to log evaluation results.'
+              : 'No historical evaluations match your search or filter criteria.'
+          }
+          actionText="Start New Assessment"
+          onAction={() => setActivePage('predict')}
+        />
       ) : (
-        <div className="overflow-x-auto border border-slate-800 rounded-xl">
+        <div className="overflow-x-auto border border-[#1F2937] rounded-xl font-sans">
           <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-900/90 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-[#0D121F] text-slate-400 font-bold font-heading uppercase tracking-wider border-b border-[#1F2937]">
               <tr>
                 <th className="p-3.5">ID / Date</th>
                 <th className="p-3.5">Demographics</th>
@@ -64,7 +73,7 @@ export default function PredictionTable() {
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[#1F2937]">
               {filteredItems.map((item) => {
                 const risk = getRiskAssessment(item.score);
                 return (
@@ -94,7 +103,7 @@ export default function PredictionTable() {
                       <div className="text-[11px] text-slate-400">Study: {item.Study_Hours}h</div>
                     </td>
                     <td className="p-3.5">
-                      <div className="text-sm font-bold text-white">{item.score} / 10</div>
+                      <div className="text-sm font-bold font-heading text-white">{typeof item.score === 'number' ? item.score.toFixed(1) : item.score} / 10</div>
                     </td>
                     <td className="p-3.5">
                       <Badge variant={risk.badgeColor}>{risk.level}</Badge>
@@ -106,14 +115,14 @@ export default function PredictionTable() {
                             setActivePrediction(item);
                             setActivePage('predict');
                           }}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors cursor-pointer"
                           title="View Details"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => deleteHistoryItem(item.id)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />

@@ -18,9 +18,9 @@ export default function Input({
   ...props
 }) {
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <div className={`flex flex-col gap-1.5 font-sans ${className}`}>
       {label && (
-        <label htmlFor={id} className="text-xs font-medium text-slate-300 flex items-center gap-1">
+        <label htmlFor={id} className="text-xs font-semibold text-slate-300 flex items-center gap-1">
           {label}
           {required && <span className="text-rose-400">*</span>}
         </label>
@@ -41,7 +41,7 @@ export default function Input({
           max={max}
           step={step}
           required={required}
-          className={`w-full glass-input rounded-xl text-sm text-slate-100 placeholder-slate-500 py-2.5 ${
+          className={`w-full glass-input rounded-lg text-sm text-slate-100 placeholder-slate-500 py-2.5 ${
             Icon ? 'pl-9' : 'pl-3.5'
           } pr-3.5 ${error ? 'border-rose-500/80 focus:ring-rose-500' : ''}`}
           {...props}

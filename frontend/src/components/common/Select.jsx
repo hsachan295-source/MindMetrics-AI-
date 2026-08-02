@@ -15,9 +15,9 @@ export default function Select({
   ...props
 }) {
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <div className={`flex flex-col gap-1.5 font-sans ${className}`}>
       {label && (
-        <label htmlFor={id} className="text-xs font-medium text-slate-300 flex items-center gap-1">
+        <label htmlFor={id} className="text-xs font-semibold text-slate-300 flex items-center gap-1">
           {label}
           {required && <span className="text-rose-400">*</span>}
         </label>
@@ -33,7 +33,7 @@ export default function Select({
           value={value}
           onChange={onChange}
           required={required}
-          className={`w-full glass-input rounded-xl text-sm text-slate-100 bg-slate-900/90 py-2.5 ${
+          className={`w-full glass-input rounded-lg text-sm text-slate-100 bg-[#0D121F] py-2.5 ${
             Icon ? 'pl-9' : 'pl-3.5'
           } pr-9 appearance-none cursor-pointer ${error ? 'border-rose-500/80' : ''}`}
           {...props}
@@ -42,7 +42,7 @@ export default function Select({
             const val = typeof opt === 'object' ? opt.value : opt;
             const lbl = typeof opt === 'object' ? opt.label : opt;
             return (
-              <option key={val} value={val} className="bg-slate-900 text-slate-100 py-1">
+              <option key={val} value={val} className="bg-[#0D121F] text-slate-100 py-1">
                 {lbl}
               </option>
             );

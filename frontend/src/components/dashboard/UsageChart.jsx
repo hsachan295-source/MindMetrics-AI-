@@ -17,10 +17,10 @@ import { DASHBOARD_STATS } from '../../services/sampleData';
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 p-4 rounded-xl shadow-2xl text-slate-100 text-xs sm:text-sm min-w-[200px] space-y-2 font-sans">
+      <div className="bg-[#131826]/95 backdrop-blur-md border border-[#1F2937] p-4 rounded-xl shadow-2xl text-slate-100 text-xs sm:text-sm min-w-[200px] space-y-2 font-sans pointer-events-none">
         <div className="font-bold text-white border-b border-slate-800 pb-1.5 flex justify-between items-center">
           <span>Daily Screen Time:</span>
-          <span className="text-blue-400">{label}</span>
+          <span className="text-blue-400 font-heading">{label}</span>
         </div>
         <div className="space-y-1.5 pt-1">
           {payload.map((item, idx) => (
@@ -57,6 +57,13 @@ export default function UsageChart() {
       >
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={DASHBOARD_STATS.usageVsScore} margin={{ top: 15, right: 15, left: -15, bottom: 5 }}>
+            <defs>
+              <linearGradient id="usageBarGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#3b82f6" />
+                <stop offset="100%" stopColor="#6366f1" stopOpacity={0.8} />
+              </linearGradient>
+            </defs>
+
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
             <XAxis 
               dataKey="hours" 
@@ -84,7 +91,7 @@ export default function UsageChart() {
             <Bar 
               dataKey="avgScore" 
               name="Mental Stress Score (1-10)" 
-              fill="#3b82f6" 
+              fill="url(#usageBarGradient)" 
               radius={[6, 6, 0, 0]} 
               animationDuration={800}
             />
