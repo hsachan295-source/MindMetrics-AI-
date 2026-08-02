@@ -107,12 +107,12 @@ export const DASHBOARD_STATS = {
   avgScreenTimeHours: 5.2,
   
   platformImpact: [
-    { platform: 'TikTok', avgScore: 7.4, users: 380, stressIndex: 82 },
-    { platform: 'Instagram', avgScore: 6.9, users: 410, stressIndex: 75 },
-    { platform: 'Snapchat', avgScore: 6.8, users: 210, stressIndex: 71 },
-    { platform: 'Twitter', avgScore: 6.5, users: 150, stressIndex: 68 },
-    { platform: 'YouTube', avgScore: 5.4, users: 290, stressIndex: 52 },
-    { platform: 'LinkedIn', avgScore: 4.8, users: 180, stressIndex: 44 },
+    { platform: 'TikTok', avgScore: 7.4, users: 380, avgUsage: 5.8, stressIndex: 82 },
+    { platform: 'Instagram', avgScore: 6.9, users: 410, avgUsage: 5.2, stressIndex: 75 },
+    { platform: 'Snapchat', avgScore: 6.8, users: 210, avgUsage: 4.9, stressIndex: 71 },
+    { platform: 'Twitter', avgScore: 6.5, users: 150, avgUsage: 4.3, stressIndex: 68 },
+    { platform: 'YouTube', avgScore: 5.4, users: 290, avgUsage: 3.8, stressIndex: 52 },
+    { platform: 'LinkedIn', avgScore: 4.8, users: 180, avgUsage: 2.5, stressIndex: 44 },
   ],
 
   usageVsScore: [
